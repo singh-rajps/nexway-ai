@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexway - Broadband & Device Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        
+        /* Nexway Branding */
+        .nexway-logo { font-family: Arial, sans-serif; font-size: 32px; font-weight: 900; font-style: italic; color: #103487; letter-spacing: -1px; text-decoration: none; cursor: pointer;}
+        .nexway-logo span { color: #d1121c; }
+        .nexway-top-nav .nav-link { color: #103487 !important; font-weight: 500; font-size: 15px; cursor: pointer; }
+        .nexway-action-bar { background-color: #0b3c7c; }
+        .nexway-action-icon { transition: transform 0.2s; cursor: pointer; }
+        .nexway-action-icon:hover { transform: translateY(-3px); }
+        
+        /* Custom UI */
+        .custom-login-tabs .nav-link { color: #495057; font-weight: 500; border: none; cursor: pointer; transition: 0.2s; }
+        .form-control:focus, .form-select:focus { box-shadow: none !important; border-color: #103487 !important; }
+        .view-section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Admin Dashboard Styling */
+        .admin-view { display: none; }
+        .admin-view.active { display: block; }
+        .admin-nav { color: #495057; border-radius: 8px; cursor: pointer; transition: 0.2s; padding: 10px 15px; font-weight: 500;}
+        .admin-nav:hover { background-color: #f0f2f5; }
+        .admin-nav.active { background-color: #103487 !important; color: white !important; font-weight: 600; box-shadow: 0 4px 6px rgba(16, 52, 135, 0.2); }
+        .admin-nav-container::-webkit-scrollbar { height: 0px; }
+    </style>
+</head>
+<body>
+    <!-- 1. NEXWAY TOP NAVIGATION -->
+    <nav class="navbar navbar-expand-lg bg-white py-3 border-bottom nexway-top-nav sticky-top shadow-sm">
+        <div class="container-fluid px-lg-5">
+            <a class="nexway-logo me-5" onclick="switchTab('home')">nexw<span>@</span>y</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse justify-content-end" id="topNav">
+                <ul class="navbar-nav gap-3 align-items-center">
+                    <li class="nav-item"><a class="nav-link" onclick="switchTab('home')">Home</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Broadband</a>
+                        <ul class="dropdown-menu border-0 shadow">
+                            <li><a class="dropdown-item py-2 fw-bold text-dark" onclick="switchTab('new-connection')" style="cursor:pointer;"><i class="bi bi-stars text-warning me-1"></i> New Connection</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item py-2" onclick="switchTab('business')" style="cursor:pointer;">Business Broadband</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-primary fw-bold py-2" href="#" data-bs-toggle="modal" data-bs-target="#broadbandLoginModal">Manage Broadband Account</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Digital Cable TV</a>
+                        <ul class="dropdown-menu border-0 shadow">
+                            <li><a class="dropdown-item text-primary fw-bold py-2" href="#" data-bs-toggle="modal" data-bs-target="#digitalTvLoginModal">Manage Digital TV</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" onclick="switchTab('contact')">Customer Care</a></li>
+                    
+                    <!-- IoT Admin Link -->
+                    <li class="nav-item ms-lg-4 border-start ps-lg-3 mt-2 mt-lg-0">
+                        <button class="btn btn-outline-danger fw-bold rounded-pill" onclick="switchTab('admin-overview')"><i class="bi bi-cpu"></i> Device Management</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. NEXWAY SECONDARY ACTION BAR -->
+    <div class="nexway-action-bar text-white py-3 shadow-sm">
+        <div class="container-fluid px-lg-5">
+            <div class="row text-center g-2 g-md-0">
+                <div class="col-4 col-md-2 nexway-action-icon"><a onclick="switchTab('new-connection')" class="text-white text-decoration-none"><i class="bi bi-plus-square fs-4 d-block mb-1"></i><span style="font-size: 13px;">New Connection</span></a></div>
+                <div class="col-4 col-md-2 nexway-action-icon" data-bs-toggle="modal" data-bs-target="#quickRechargeModal"><a class="text-white text-decoration-none"><i class="bi bi-wallet2 fs-4 d-block mb-1"></i><span style="font-size: 13px;">Quick Recharge</span></a></div>
+                <div class="col-4 col-md-2 nexway-action-icon" onclick="switchTab('contact')"><a class="text-white text-decoration-none"><i class="bi bi-telephone fs-4 d-block mb-1"></i><span style="font-size: 13px;">Customer Care</span></a></div>
+                <div class="col-4 col-md-2 nexway-action-icon" data-bs-toggle="modal" data-bs-target="#broadbandLoginModal"><a class="text-white text-decoration-none"><i class="bi bi-person-circle fs-4 d-block mb-1"></i><span style="font-size: 13px;">Selfcare</span></a></div>
+                <div class="col-4 col-md-2 nexway-action-icon"><a class="text-white text-decoration-none"><i class="bi bi-phone fs-4 d-block mb-1"></i><span style="font-size: 13px;">Download App</span></a></div>
+                <div class="col-4 col-md-2 nexway-action-icon"><a class="text-white text-decoration-none"><i class="bi bi-headset fs-4 d-block mb-1"></i><span style="font-size: 13px;">Quick Support</span></a></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOME SECTION -->
+    <div id="home-section" class="view-section active">
+        <div class="container-fluid px-lg-5 py-4">
+            <div class="row mb-5 g-0" style="min-height: 420px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.15); background-color: #103487;">
+                <!-- Text Content Side -->
+                <div class="col-md-6 col-lg-5 text-white p-4 p-lg-5 d-flex flex-column justify-content-center position-relative" style="z-index: 2;">
+                    <h1 class="fw-bold mb-4" style="color: #c4f033; font-size: clamp(1.8rem, 3vw, 2.5rem); line-height: 1.3;">Save Nexway broadband support in your contacts today!</h1>
+                    <div class="border border-white border-2 p-3 p-md-4 text-center position-relative mt-4" style="border-radius: 12px; background-color: rgba(16, 52, 135, 0.4); backdrop-filter: blur(4px);">
+                        <span class="px-4 py-1 position-absolute top-0 start-50 translate-middle rounded-pill fw-bold" style="background-color: #c4f033; color: #103487; font-size: clamp(0.85rem, 2vw, 1rem); white-space: nowrap; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Save as: Nexway Support</span>
+                        <h4 class="fw-bold mt-4 mb-3" style="font-size: clamp(1.1rem, 2vw, 1.4rem); letter-spacing: 0.5px;"><i class="bi bi-telephone-fill me-2" style="color: #c4f033;"></i>080-65159555<br class="d-md-none"><span class="d-none d-md-inline"> / </span>080-44479555</h4>
+                        <button class="btn text-white mt-2 px-5 py-2 fw-bold rounded shadow text-uppercase" style="background-color: #d1121c; letter-spacing: 1px;">SAVE NOW</button>
+                    </div>
+                </div>
+                <!-- Image Side -->
+                <div class="col-md-6 col-lg-7 d-none d-md-block position-relative">
+                    <!-- High-quality image of customer support / fast internet usage -->
+                    <div style="background: url('https://images.unsplash.com/photo-1590650153855-d9e808231d41?auto=format&fit=crop&w=1200&q=80') center 30%/cover no-repeat; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+                    <!-- Smooth fade gradient to blend with the blue background -->
+                    <div style="position: absolute; top: 0; left: 0; bottom: 0; width: 120px; background: linear-gradient(to right, #103487, transparent);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- NEW CONNECTION SECTION (Matches height perfectly) -->
+    <div id="new-connection-section" class="view-section bg-light">
+        <div class="container-fluid px-4 px-lg-5 py-5">
+            <div class="card shadow-lg border-0 overflow-hidden mx-auto" style="max-width: 1100px; border-radius: 12px;">
+                <div class="row g-0 align-items-stretch">
+                    <!-- Decorative Image side -->
+                    <div class="col-md-5 d-none d-md-block position-relative">
+                        <div style="background: url('/router.jpg') center/cover; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+                    </div>
+                    
+                    <!-- The Form -->
+                    <div class="col-md-7 p-4 p-md-5 bg-white d-flex flex-column justify-content-center">
+                        <div class="mx-auto" style="max-width: 550px; width: 100%;">
+                            <h3 class="text-center fw-medium mb-4" style="color: #000; font-size: 1.7rem;">Enter your details and we will call you back</h3>
+                            <div class="p-4 bg-white" style="border: 4px solid #33adff;">
+                                <form id="leadForm" onsubmit="verifyAndSubmitLead(event)">
+                                    <div class="row mb-3 align-items-center">
+                                        <div class="col-sm-4 text-dark" style="font-weight: 500; font-size: 1.05rem;">Name*</div>
+                                        <div class="col-sm-8"><input type="text" id="ln_name" class="form-control border-0 rounded-0" style="background-color: #f2f4f6; padding: 10px;" required></div>
+                                    </div>
+                                    <div class="row mb-3 align-items-center">
+                                        <div class="col-sm-4 text-dark" style="font-weight: 500; font-size: 1.05rem;">Choose City*</div>
+                                        <div class="col-sm-8">
+                                            <select id="ln_city" class="form-select border-0 rounded-0" style="background-color: #f2f4f6; padding: 10px;" required>
+                                                <option value="">Select</option>
+                                                <option value="Bangalore">Bangalore</option>
+                                                <option value="Mumbai">Mumbai</option>
+                                                <option value="Delhi">Delhi</option>
+                                                <option value="Chennai">Chennai</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3 align-items-center">
+                                        <div class="col-sm-4 text-dark" style="font-weight: 500; font-size: 1.05rem;">Address</div>
+                                        <div class="col-sm-8"><input type="text" id="ln_addr" class="form-control border-0 rounded-0" style="background-color: #f2f4f6; padding: 10px;"></div>
+                                    </div>
+                                    <div class="row mb-3 align-items-center">
+                                        <div class="col-sm-4 text-dark" style="font-weight: 500; font-size: 1.05rem;">Pincode*</div>
+                                        <div class="col-sm-8"><input type="text" id="ln_pin" class="form-control border-0 rounded-0" style="background-color: #f2f4f6; padding: 10px;" required></div>
+                                    </div>
+                                    <div class="row mb-4 align-items-center">
+                                        <div class="col-sm-4 text-dark" style="font-weight: 500; font-size: 1.05rem;">Contact No.*</div>
+                                        <div class="col-sm-8"><input type="text" id="ln_contact" class="form-control border-0 rounded-0" style="background-color: #f2f4f6; padding: 10px;" required minlength="10" maxlength="15"></div>
+                                    </div>
+                                    
+                                    <!-- OTP Row (Hidden initially) -->
+                                    <div class="row mb-4 align-items-center d-none" id="otpRow">
+                                        <div class="col-sm-4 text-dark" style="font-weight: 500; font-size: 1.05rem;">Enter OTP*</div>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="ln_otp" class="form-control rounded-0 border-primary" style="background-color: #e8f4fd; padding: 10px; border-width: 2px !important;" placeholder="Enter 6-digit OTP">
+                                            <div class="d-flex justify-content-between align-items-center mt-1">
+                                                <div class="text-success small fw-bold" id="otpStatusMsg"><i class="bi bi-check-circle-fill"></i> OTP sent to mobile!</div>
+                                                <a href="javascript:void(0)" class="small text-danger text-decoration-none fw-bold" onclick="requestOTP(true)">Resend OTP</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-8 offset-sm-4">
+                                            <button type="button" id="btnGetOtp" class="btn text-white w-100 py-3 rounded-0" style="background-color: #0b3c7c; font-weight: 500; font-size: 1.1rem; letter-spacing: 0.5px;" onclick="requestOTP()">GET OTP</button>
+                                            <button type="submit" id="btnSubmitLead" class="btn text-white w-100 py-3 rounded-0 d-none" style="background-color: #198754; font-weight: 500; font-size: 1.1rem; letter-spacing: 0.5px;">VERIFY & SUBMIT</button>
+                                            <p class="mt-2 text-dark" style="font-size: 0.75rem; line-height: 1.4;">By submitting details you agree to our <a href="#" style="color: #0000ee;">Privacy Policy and<br>Terms & Conditions</a></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="leadSuccessMsg" class="alert alert-success mt-3 d-none fw-bold">Thanks! Your verified request has been sent to our admin team.</div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT US SECTION -->
+    <div id="contact-section" class="view-section">
+        <div class="container-fluid px-4 px-lg-5 py-5 bg-white">
+            <h2 class="fw-bold text-center mb-5" style="color: #1a1a1a;">Contact Us</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-7">
+                    <div class="row mb-4 pt-3"><div class="col-md-4 fw-bold mb-3 mb-md-0" style="color: #3ba4ff;">Customer Care<br class="d-none d-md-block">Number</div><div class="col-md-8"><div class="mb-3 d-flex"><i class="bi bi-telephone text-muted me-3 mt-1 fs-5"></i><div style="line-height: 1.8;"><div class="fw-bold text-dark">7488328851</div><div class="text-muted">080-65159555</div><div class="text-muted">080-44479555</div></div></div><div class="mb-3 d-flex align-items-center"><i class="bi bi-printer text-muted me-3 fs-5"></i><div class="text-muted">022-67134737</div></div></div></div>
+                    <hr>
+                    <div class="row mb-4 pt-3"><div class="col-md-4 fw-bold mb-3 mb-md-0" style="color: #3ba4ff;">Office Address</div><div class="col-md-8"><p class="mb-3" style="line-height: 1.6; color: #1a1a1a;">Address: 14main second stage btm layout 560076</p></div></div>
+                </div>
+                <div class="col-lg-5 col-xl-4 text-center mt-5 mt-lg-0">
+                    <div class="card border-0 shadow-sm overflow-hidden rounded-4 mx-auto" style="background-color: #103487; max-width: 320px;">
+                        <div class="p-4 pb-0 text-start text-white"><h4 class="fw-bold mb-4">Manage Your Nexway Account, Anytime.</h4></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BUSINESS SECTION -->
+    <div id="business-section" class="view-section">
+        <div class="container-fluid px-0 mb-5">
+            <div class="row g-0 align-items-center" style="background: url('https://images.unsplash.com/photo-1573164713988-8665fc963095?w=1600&h=600&fit=crop') center/cover; min-height: 500px; position: relative;">
+                <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(90deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%); z-index: 1;"></div>
+                <div class="col-md-6 p-4 p-md-5 position-relative" style="z-index: 2;"><div class="text-uppercase fw-bold mb-2" style="color: #103487;">BUSINESS BROADBAND</div><h1 class="display-4 fw-bold mb-4" style="color: #103487;">The need of<br>every enterprise</h1></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- IOT ADMIN DASHBOARD (FULLY RESPONSIVE) -->
+    <div id="admin-layout" class="view-section" style="min-height: 80vh; background-color: #f0f2f5;">
+        <div class="container-fluid px-3 px-lg-5 py-4 py-md-5">
+            <div class="row">
+                
+                <!-- Admin Sidebar -->
+                <div class="col-md-3 col-lg-2 mb-4">
+                    <div class="bg-white p-2 p-md-3 border-0 shadow-sm rounded-4">
+                        <ul class="nav nav-pills flex-row flex-md-column flex-nowrap overflow-auto gap-2 admin-nav-container" style="white-space: nowrap;">
+                            <li class="nav-item"><a class="nav-link admin-nav active" id="nav-overview" onclick="switchAdminTab('admin-overview')"><i class="bi bi-speedometer2 me-2"></i> Overview</a></li>
+                            <li class="nav-item"><a class="nav-link admin-nav" id="nav-plans" onclick="switchAdminTab('admin-plans')"><i class="bi bi-tags me-2"></i> Plans</a></li>
+                            <li class="nav-item"><a class="nav-link admin-nav" id="nav-users" onclick="switchAdminTab('admin-users')"><i class="bi bi-people me-2"></i> Users</a></li>
+                            <li class="nav-item"><a class="nav-link admin-nav" id="nav-devices" onclick="switchAdminTab('admin-devices')"><i class="bi bi-router me-2"></i> Devices</a></li>
+                            <li class="nav-item"><a class="nav-link admin-nav mt-md-3" id="nav-leads" onclick="switchAdminTab('admin-leads')"><i class="bi bi-person-lines-fill me-2"></i> New Con. Leads</a></li>
+                            <li class="nav-item"><a class="nav-link admin-nav mt-md-1" id="nav-recharges" onclick="switchAdminTab('admin-recharges')"><i class="bi bi-wallet2 me-2"></i> Recharges</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Admin Main Content -->
+                <div class="col-md-9 col-lg-10">
+                    
+                    <!-- Overview Tab -->
+                    <div id="admin-overview" class="admin-view active">
+                        <h3 class="fw-bold mb-4" style="color: #103487;">IoT Network Overview</h3>
+                        <div class="row g-4">
+                            <div class="col-sm-6 col-md-4">
+                                <div class="card p-4 shadow-sm border-primary" style="border-width: 2px !important; border-radius: 6px; background-color: #fff;">
+                                    <h6 class="text-dark fw-bold mb-3" style="font-size: 0.95rem;">Total Devices</h6>
+                                    <h2 class="fw-bold mb-0 text-dark" id="statTotalDevices">0</h2>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="card p-4 shadow-sm border-success" style="border-width: 2px !important; border-radius: 6px; background-color: #fff;">
+                                    <h6 class="text-dark fw-bold mb-3" style="font-size: 0.95rem;">Registered Users</h6>
+                                    <h2 class="fw-bold mb-0 text-success" id="statTotalUsers">0</h2>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="card p-4 shadow-sm border-warning" style="border-width: 2px !important; border-radius: 6px; background-color: #fff;">
+                                    <h6 class="text-dark fw-bold mb-3" style="font-size: 0.95rem;">Active Plans</h6>
+                                    <h2 class="fw-bold mb-0 text-dark" id="statActivePlans">0</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Registration Analytics Chart -->
+                        <div class="row mt-5">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="fw-bold text-dark mb-0"><i class="bi bi-graph-up-arrow me-2"></i>Registration Analytics</h5>
+                                    <select id="chartTimeFilter" class="form-select form-select-sm w-auto fw-bold shadow-sm" style="border-color: #103487;" onchange="renderChart()">
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly" selected>Monthly</option>
+                                        <option value="yearly">Yearly</option>
+                                    </select>
+                                </div>
+                                <div class="card p-3 p-md-4 shadow-sm border-0 rounded-4 bg-white" style="position: relative; height: 350px; width: 100%;">
+                                    <canvas id="analyticsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Plans Tab -->
+                    <div id="admin-plans" class="admin-view">
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
+                            <h3 class="fw-bold mb-0" style="color: #103487;">Subscription Plans</h3>
+                            <button class="btn text-white px-4 py-2 shadow-sm fw-bold" style="background-color: #0d6efd; border-radius: 6px;" data-bs-toggle="modal" data-bs-target="#addPlanModal">
+                                <i class="bi bi-plus-lg me-1"></i> Create Plan
+                            </button>
+                        </div>
+                        <div class="row g-4" id="plansContainer"></div>
+                    </div>
+
+                    <!-- Users Tab -->
+                    <div id="admin-users" class="admin-view">
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
+                            <h2 class="fw-bold mb-0" style="color: #103487;">User Directory</h2>
+                            <button class="btn text-white px-4 py-2 shadow-sm fw-bold" style="background-color: #0d6efd; border-radius: 6px;" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                                <i class="bi bi-person-plus me-1"></i> Add User
+                            </button>
+                        </div>
+                        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                            <div class="table-responsive">
+                                <table class="table align-middle mb-0" style="white-space: nowrap; min-width: 800px;">
+                                    <thead class="bg-white" style="border-bottom: 2px solid #f0f0f0;">
+                                        <tr>
+                                            <th class="ps-4 py-3 fw-bold border-0 text-dark">Full Name</th>
+                                            <th class="py-3 fw-bold border-0 text-dark">Email</th>
+                                            <th class="py-3 fw-bold border-0 text-dark">Assigned Plan</th>
+                                            <th class="py-3 fw-bold border-0 text-dark">Status</th>
+                                            <th class="text-end pe-4 py-3 fw-bold border-0 text-dark">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="userTableBody" class="bg-white"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Devices Tab -->
+                    <div id="admin-devices" class="admin-view">
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
+                            <h3 class="fw-bold mb-0" style="color: #103487;">Device Inventory</h3>
+                            <div>
+                                <button class="btn btn-outline-dark px-3 py-2 bg-white shadow-sm fw-bold rounded-3 me-2" onclick="loadData()"><i class="bi bi-arrow-clockwise"></i></button>
+                                <button class="btn text-white px-4 py-2 shadow-sm fw-bold" style="background-color: #0d6efd; border-radius: 6px;" data-bs-toggle="modal" data-bs-target="#addDeviceModal">
+                                    <i class="bi bi-plus-lg me-1"></i> Add Device
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0" style="white-space: nowrap; font-size: 0.95rem; min-width: 800px;">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th class="ps-4 py-3">Device / Type</th>
+                                            <th class="py-3">Owner</th>
+                                            <th class="py-3">Coordinates</th>
+                                            <th class="py-3">Status</th>
+                                            <th class="text-end pe-4 py-3">Manage</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="deviceTableBody" class="bg-white"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NEW CONNECTIONS (LEADS) TAB WITH RESPONSIVE DETAILS & ASSIGNMENT -->
+                    <div id="admin-leads" class="admin-view">
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
+                            <h3 class="fw-bold mb-0" style="color: #103487;">New Connection Leads</h3>
+                            <button class="btn btn-outline-dark px-3 py-2 bg-white shadow-sm fw-bold rounded-3" onclick="loadData()"><i class="bi bi-arrow-clockwise me-1"></i> Refresh Leads</button>
+                        </div>
+                        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                            <!-- Responsive Wrapper -->
+                            <div class="table-responsive">
+                                <table class="table align-middle mb-0" style="white-space: nowrap; font-size: 0.95rem; min-width: 900px;">
+                                    <thead class="bg-white" style="border-bottom: 2px solid #f0f0f0;">
+                                        <tr>
+                                            <th class="ps-4 py-3 fw-bold border-0 text-dark">Customer Info</th>
+                                            <th class="py-3 fw-bold border-0 text-dark">Location Details</th>
+                                            <th class="py-3 fw-bold border-0 text-dark">Status</th>
+                                            <th class="py-3 fw-bold border-0 text-dark">Assigned Caller</th>
+                                            <th class="text-end pe-4 py-3 fw-bold border-0 text-dark">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="leadTableBody" class="bg-white">
+                                        <!-- Will populate dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RECHARGES TAB -->
+                    <div id="admin-recharges" class="admin-view">
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
+                            <h3 class="fw-bold mb-0" style="color: #103487;">Recharge Requests</h3>
+                            <button class="btn btn-outline-dark px-3 py-2 bg-white shadow-sm fw-bold rounded-3" onclick="loadData()"><i class="bi bi-arrow-clockwise me-1"></i> Refresh</button>
+                        </div>
+                        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                            <div class="table-responsive">
+                                <table class="table align-middle mb-0" style="white-space: nowrap; font-size: 0.95rem; min-width: 800px;">
+                                    <thead class="bg-white" style="border-bottom: 2px solid #f0f0f0;">
+                                        <tr>
+                                            <th class="ps-4 py-3 fw-bold border-0 text-dark">Date & Time</th>
+                                            <th class="py-3 fw-bold border-0 text-dark">Type</th>
+                                            <th class="py-3 fw-bold border-0 text-dark">Account/Mobile No.</th>
+                                            <th class="py-3 fw-bold border-0 text-dark">Status</th>
+                                            <th class="text-end pe-4 py-3 fw-bold border-0 text-dark">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="rechargeTableBody" class="bg-white">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD MODALS -->
+    <!-- Add Device Modal -->
+    <div class="modal fade" id="addDeviceModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white border-0"><h5 class="modal-title fw-bold">Register New Device</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body p-4">
+                    <form id="addDeviceForm" onsubmit="submitDevice(event)">
+                        <div class="mb-3"><label class="form-label fw-bold text-dark">Device Name</label><input type="text" class="form-control bg-light border-0 py-2" id="devName" required></div>
+                        <div class="mb-3"><label class="form-label fw-bold text-dark">Device Type</label>
+                            <select class="form-select bg-light border-0 py-2" id="devType" required>
+                                <option value="Router">Router</option><option value="ONT">ONT (Fiber)</option><option value="Set-Top Box">Set-Top Box</option><option value="IoT Hub">IoT Hub</option>
+                            </select>
+                        </div>
+                        <div class="mb-3"><label class="form-label fw-bold text-dark">Assign to User (Optional)</label><input type="text" class="form-control bg-light border-0 py-2" id="devOwner" placeholder="e.g. John Doe"></div>
+                        <div class="row">
+                            <div class="col-6 mb-4"><label class="form-label fw-bold text-dark">Latitude</label><input type="number" step="any" class="form-control bg-light border-0 py-2" id="devLat" placeholder="28.7041"></div>
+                            <div class="col-6 mb-4"><label class="form-label fw-bold text-dark">Longitude</label><input type="number" step="any" class="form-control bg-light border-0 py-2" id="devLng" placeholder="77.1025"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold py-2 rounded-3">Register Device</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add User Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white border-0"><h5 class="modal-title fw-bold">Add User</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body p-4">
+                    <form id="addUserForm" onsubmit="submitUser(event)">
+                        <div class="mb-3"><label class="form-label fw-bold text-dark">Full Name</label><input type="text" class="form-control bg-light border-0 py-2" id="usrName" required></div>
+                        <div class="mb-3"><label class="form-label fw-bold text-dark">Email Address</label><input type="email" class="form-control bg-light border-0 py-2" id="usrEmail" required></div>
+                        <div class="mb-4"><label class="form-label fw-bold text-dark">Subscription Plan</label>
+                            <select class="form-select bg-light border-0 py-2" id="usrPlan">
+                                <option value="Free">Free</option><option value="Pro">Pro</option><option value="Enterprise">Enterprise</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold py-2 rounded-3">Save User</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Plan Modal -->
+    <div class="modal fade" id="addPlanModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white border-0"><h5 class="modal-title fw-bold">Create New Plan</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body p-4">
+                    <form id="addPlanForm" onsubmit="submitPlan(event)">
+                        <div class="mb-3"><label class="form-label fw-bold text-dark">Plan Name</label><input type="text" class="form-control bg-light border-0 py-2" id="plnName" required></div>
+                        <div class="mb-3"><label class="form-label fw-bold text-dark">Monthly Price ($)</label><input type="number" step="0.01" class="form-control bg-light border-0 py-2" id="plnPrice" required></div>
+                        <div class="mb-4"><label class="form-label fw-bold text-dark">Features (comma separated)</label><input type="text" class="form-control bg-light border-0 py-2" id="plnFeatures" placeholder="e.g. 500Mbps, Static IP, Support" required></div>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold py-2 rounded-3">Create Plan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Recharge Modal -->
+    <div class="modal fade" id="quickRechargeModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header text-white border-0" style="background-color: #0b3c7c;">
+                    <h5 class="modal-title fw-bold">Quick Recharge</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 p-md-5">
+                    <h4 class="fw-bold text-dark mb-4 text-center">Enter Your Details</h4>
+                    
+                    <form id="quickRechargeForm" onsubmit="submitRecharge(event)">
+                        
+                        <!-- Selection toggle (Account vs Mobile) -->
+                        <div class="d-flex justify-content-center mb-4 gap-4 flex-wrap">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rechargeType" id="rbAccount" value="account" checked onchange="document.getElementById('rechargeInput').placeholder = 'Account Number';">
+                                <label class="form-check-label fw-bold text-dark" style="font-size: 0.95rem; cursor: pointer;" for="rbAccount">Account Number</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rechargeType" id="rbMobile" value="mobile" onchange="document.getElementById('rechargeInput').placeholder = 'Registered Mobile Number';">
+                                <label class="form-check-label fw-bold text-dark" style="font-size: 0.95rem; cursor: pointer;" for="rbMobile">Registered Mobile Number</label>
+                            </div>
+                        </div>
+
+                        <!-- Input Field -->
+                        <div class="mb-4">
+                            <input type="text" class="form-control bg-light border-0 py-3" id="rechargeInput" placeholder="Account Number" required>
+                        </div>
+
+                        <!-- CAPTCHA Section -->
+                        <div class="mb-4 text-center">
+                            <!-- Mock Captcha Image -->
+                            <div class="d-inline-block bg-white border border-2 border-secondary rounded px-4 py-2 mb-3 shadow-sm position-relative" style="user-select: none; background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 10px, #ffffff 10px, #ffffff 20px);">
+                                <h2 class="fw-bold mb-0 text-decoration-line-through" style="color: #0b3c7c; letter-spacing: 8px; font-family: 'Courier New', Courier, monospace; opacity: 0.8; font-style: italic;">X7qP9</h2>
+                            </div>
+                            <input type="text" class="form-control bg-light border-0 py-3 text-center" id="rechargeCaptcha" placeholder="Type the text in the image above" required>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn text-white w-100 py-3 fw-bold rounded-3" style="background-color: #d1121c; font-size: 1.1rem; letter-spacing: 1px;">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            if(tabId.startsWith('admin-')) {
+                document.getElementById('admin-layout').classList.add('active');
+                switchAdminTab(tabId);
+                loadData();
+            } else {
+                document.getElementById(`${tabId}-section`).classList.add('active');
+            }
+            window.scrollTo(0, 0);
+        }
+        
+        function switchAdminTab(tabId) {
+            document.querySelectorAll('.admin-nav').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.admin-view').forEach(el => el.classList.remove('active'));
+            
+            let navId = `nav-${tabId.split('-')[1]}`;
+            let navEl = document.getElementById(navId);
+            if(navEl) navEl.classList.add('active');
+            
+            let viewEl = document.getElementById(tabId);
+            if(viewEl) viewEl.classList.add('active');
+        }
+
+        // --- Data Fetching ---
+        const API_DEV = '/devices/', API_USR = '/users/', API_PLN = '/plans/', API_LEAD = '/leads/', API_RCH = '/recharges/';
+        let allDevices = [], allUsers = [], allPlans = [], allLeads = [], allRecharges = [];
+
+        async function loadData() {
+            try {
+                const [dRes, uRes, pRes, lRes, rRes] = await Promise.all([fetch(API_DEV), fetch(API_USR), fetch(API_PLN), fetch(API_LEAD), fetch(API_RCH)]);
+                allDevices = await dRes.json(); allUsers = await uRes.json(); allPlans = await pRes.json(); allLeads = await lRes.json(); allRecharges = await rRes.json();
+                
+                // Stats Update
+                const statTotal = document.getElementById('statTotalDevices');
+                if(statTotal) statTotal.innerText = allDevices.length;
+                const statUsers = document.getElementById('statTotalUsers');
+                if(statUsers) statUsers.innerText = allUsers.length;
+                const statPlans = document.getElementById('statActivePlans');
+                if(statPlans) statPlans.innerText = allPlans.filter(p=>p.is_active).length;
+                
+                // 1. Devices Table
+                const devTbody = document.getElementById('deviceTableBody');
+                if(devTbody) {
+                    devTbody.innerHTML = allDevices.map(d => `
+                        <tr>
+                            <td class="ps-4 py-3"><div class="fw-bold text-dark">${d.name}</div><div class="text-muted small">${d.device_type} (${d.firmware_version})</div></td>
+                            <td class="py-3">${d.owner || '<span class="text-muted">Unassigned</span>'}</td>
+                            <td class="py-3"><span class="badge bg-light text-dark border"><i class="bi bi-geo-alt-fill text-danger"></i> ${d.latitude || '0.0'}, ${d.longitude || '0.0'}</span></td>
+                            <td class="py-3"><span class="badge ${d.status==='online'?'bg-success':'bg-secondary'} rounded-pill">${d.status}</span></td>
+                            <td class="text-end pe-4 py-3"><button class="btn btn-sm btn-outline-danger shadow-sm rounded-3" onclick="deleteDevice('${d.id}')"><i class="bi bi-trash"></i></button></td>
+                        </tr>
+                    `).join('');
+                }
+
+                // 2. Users Table
+                const usrTbody = document.getElementById('userTableBody');
+                if(usrTbody) {
+                    usrTbody.innerHTML = allUsers.map(u => `
+                        <tr>
+                            <td class="ps-4 py-3 fw-bold text-dark">${u.name}</td>
+                            <td class="py-3">${u.email}</td>
+                            <td class="py-3"><span class="badge bg-primary rounded-pill">${u.plan}</span></td>
+                            <td class="py-3"><span class="badge ${u.is_active?'bg-success':'bg-danger'} rounded-pill">${u.is_active?'Active':'Inactive'}</span></td>
+                            <td class="text-end pe-4 py-3"><button class="btn btn-sm btn-outline-danger shadow-sm rounded-3" onclick="deleteUser('${u.id}')"><i class="bi bi-trash"></i></button></td>
+                        </tr>
+                    `).join('');
+                }
+
+                // 3. Plans Cards
+                const plnContainer = document.getElementById('plansContainer');
+                if(plnContainer) {
+                    plnContainer.innerHTML = allPlans.map(p => `
+                        <div class="col-sm-6 col-md-4">
+                            <div class="card border-0 shadow-sm rounded-4 h-100 ${p.is_active ? 'border-top border-primary border-4' : 'opacity-75'}">
+                                <div class="card-body p-4">
+                                    <h5 class="fw-bold text-dark">${p.name}</h5>
+                                    <h3 class="fw-bold mb-3" style="color: #103487;">$${p.price}<span class="fs-6 text-muted fw-normal">/mo</span></h3>
+                                    <ul class="list-unstyled mb-4">
+                                        ${p.features.map(f => `<li class="mb-2 text-muted small"><i class="bi bi-check-circle-fill text-success me-2"></i>${f}</li>`).join('')}
+                                    </ul>
+                                    <span class="badge ${p.is_active?'bg-success':'bg-secondary'} rounded-pill w-100 py-2">${p.is_active?'Active Plan':'Inactive'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                // 4. Leads / New Connections Table
+                const leadTbody = document.getElementById('leadTableBody');
+                if(leadTbody) {
+                    const userOptions = allUsers.map(u => `<option value="${u.name}">${u.name}</option>`).join('');
+                    
+                    if(allLeads.length === 0) {
+                        leadTbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-muted fw-medium"><i class="bi bi-inbox fs-2 d-block mb-2"></i>No new connection requests yet.</td></tr>`;
+                    } else {
+                        leadTbody.innerHTML = allLeads.map(l => {
+                            let badgeClass = l.status === 'New' ? 'bg-warning text-dark' : (l.status === 'Assigned' ? 'bg-info text-dark' : 'bg-success');
+                            let assignUI = l.assigned_to 
+                                ? `<div class="fw-bold text-success d-flex align-items-center"><i class="bi bi-person-check-fill fs-5 me-2"></i> ${l.assigned_to}</div>`
+                                : `<select class="form-select form-select-sm border-primary shadow-sm" style="max-width: 180px; font-weight: 500;" onchange="assignLead('${l.id}', this.value)">
+                                    <option value="">-- Assign Caller --</option>
+                                    ${userOptions}
+                                   </select>`;
+                                   
+                            return `
+                                <tr class="border-bottom">
+                                    <td class="ps-4 py-3">
+                                        <div class="fw-bold text-dark fs-6">${l.name}</div>
+                                        <div class="text-primary fw-bold mt-1"><i class="bi bi-telephone-fill me-1"></i>${l.contact_no}</div>
+                                    </td>
+                                    <td class="py-3">
+                                        <div class="fw-bold text-dark">${l.city}</div>
+                                        <div class="text-muted small mt-1" style="white-space: normal; max-width: 250px;">
+                                            <i class="bi bi-geo-alt me-1"></i>${l.address || 'No Address Provided'}<br>
+                                            <span class="ms-3">Pin: ${l.pincode}</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3">
+                                        <span class="badge ${badgeClass} rounded-pill px-3 py-2 shadow-sm">${l.status}</span>
+                                    </td>
+                                    <td class="py-3">${assignUI}</td>
+                                    <td class="text-end pe-4 py-3">
+                                        <button class="btn btn-sm ${l.status==='Completed' ? 'btn-secondary' : 'btn-success'} fw-bold rounded-pill shadow-sm px-3" onclick="markLeadCompleted('${l.id}')" ${l.status==='Completed'?'disabled':''} title="Mark as Completed">
+                                            <i class="bi bi-check2-all"></i> Done
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger fw-bold rounded-pill shadow-sm px-3 ms-2" onclick="deleteLead('${l.id}')" title="Delete Request">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        }).reverse().join('');
+                    }
+                }
+                
+                // 5. Recharges Table
+                const rchTbody = document.getElementById('rechargeTableBody');
+                if(rchTbody) {
+                    if(allRecharges.length === 0) {
+                        rchTbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-muted fw-medium"><i class="bi bi-wallet2 fs-2 d-block mb-2"></i>No recharge requests yet.</td></tr>`;
+                    } else {
+                        rchTbody.innerHTML = allRecharges.map(r => {
+                            const dateObj = new Date(r.created_at);
+                            const dateStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                            return `
+                                <tr class="border-bottom">
+                                    <td class="ps-4 py-3 text-muted">${dateStr}</td>
+                                    <td class="py-3 fw-bold text-dark">${r.recharge_type === 'account' ? 'Account No.' : 'Mobile No.'}</td>
+                                    <td class="py-3 text-primary fw-bold fs-6">${r.account_id}</td>
+                                    <td class="py-3"><span class="badge bg-warning text-dark rounded-pill shadow-sm px-3 py-2">${r.status}</span></td>
+                                    <td class="text-end pe-4 py-3">
+                                        <button class="btn btn-sm btn-outline-danger fw-bold rounded-pill shadow-sm px-3" onclick="deleteRecharge('${r.id}')" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        }).reverse().join('');
+                    }
+                }
+
+                // Render Analytics
+                if(document.getElementById('admin-overview').classList.contains('active')) {
+                    renderChart();
+                }
+
+            } catch (err) { console.error(err); }
+        }
+
+        // --- Analytics Chart Logic ---
+        function renderChart() {
+            const filter = document.getElementById('chartTimeFilter').value;
+            const ctx = document.getElementById('analyticsChart');
+            if(!ctx) return;
+            
+            let labels = [];
+            let userCounts = [];
+            let leadCounts = [];
+            let rchCounts = [];
+
+            if(filter === 'weekly') {
+                labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                userCounts = [0, 0, 0, allUsers.length]; 
+                leadCounts = [0, 0, 0, allLeads.length];
+                rchCounts = [0, 0, 0, allRecharges.length];
+            } else if (filter === 'monthly') {
+                labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                userCounts = new Array(12).fill(0);
+                leadCounts = new Array(12).fill(0);
+                rchCounts = new Array(12).fill(0);
+                
+                allUsers.forEach(u => { if(u.created_at) userCounts[new Date(u.created_at).getMonth()]++; });
+                allLeads.forEach(l => { if(l.created_at) leadCounts[new Date(l.created_at).getMonth()]++; });
+                allRecharges.forEach(r => { if(r.created_at) rchCounts[new Date(r.created_at).getMonth()]++; });
+            } else {
+                let curYear = new Date().getFullYear();
+                labels = [(curYear-2).toString(), (curYear-1).toString(), curYear.toString()];
+                userCounts = [0, 0, allUsers.length];
+                leadCounts = [0, 0, allLeads.length];
+                rchCounts = [0, 0, allRecharges.length];
+            }
+
+            if(window.myChart) {
+                window.myChart.destroy();
+            }
+
+            window.myChart = new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Registered Users', data: userCounts, backgroundColor: '#198754' },
+                        { label: 'New Connections', data: leadCounts, backgroundColor: '#0dcaf0' },
+                        { label: 'Recharges', data: rchCounts, backgroundColor: '#ffc107' }
+                    ]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+
+        // --- Lead Actions (Assign / Complete / Delete) ---
+        async function assignLead(id, assignee) {
+            if(!assignee) return;
+            try {
+                await fetch(API_LEAD + id, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ assigned_to: assignee, status: 'Assigned' })
+                });
+                loadData(); 
+            } catch(e) { console.error(e); }
+        }
+
+        async function markLeadCompleted(id) {
+            try {
+                await fetch(API_LEAD + id, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ status: 'Completed' })
+                });
+                loadData();
+            } catch(e) { console.error(e); }
+        }
+
+        async function deleteLead(id) {
+            if(!confirm('Delete this new connection lead?')) return;
+            try {
+                await fetch(API_LEAD + id, { method: 'DELETE' });
+                loadData();
+            } catch(e) { console.error(e); }
+        }
+
+        // --- Recharge Actions ---
+        async function submitRecharge(e) {
+            e.preventDefault();
+            const typeEl = document.querySelector('input[name="rechargeType"]:checked');
+            const reqData = {
+                recharge_type: typeEl ? typeEl.value : 'account',
+                account_id: document.getElementById('rechargeInput').value,
+                captcha: document.getElementById('rechargeCaptcha').value
+            };
+            try {
+                await fetch(API_RCH, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(reqData) });
+                bootstrap.Modal.getInstance(document.getElementById('quickRechargeModal')).hide();
+                e.target.reset();
+                alert('Recharge request submitted successfully!');
+                loadData();
+            } catch(err) { console.error(err); }
+        }
+
+        async function deleteRecharge(id) {
+            if(!confirm('Delete this recharge record?')) return;
+            try {
+                await fetch(API_RCH + id, { method: 'DELETE' });
+                loadData();
+            } catch(e) { console.error(e); }
+        }
+
+        // --- Basic Delete Functions for other entities ---
+        async function deleteDevice(id) {
+            if(!confirm('Delete device?')) return;
+            await fetch(API_DEV + id, { method: 'DELETE' });
+            loadData();
+        }
+        async function deleteUser(id) {
+            if(!confirm('Delete user?')) return;
+            await fetch(API_USR + id, { method: 'DELETE' });
+            loadData();
+        }
+
+        // --- Entity Submit Handlers ---
+        async function submitDevice(e) {
+            e.preventDefault();
+            const devData = {
+                name: document.getElementById('devName').value,
+                device_type: document.getElementById('devType').value,
+                firmware_version: 'v1.0.0', 
+                owner: document.getElementById('devOwner').value,
+                latitude: parseFloat(document.getElementById('devLat').value) || null,
+                longitude: parseFloat(document.getElementById('devLng').value) || null
+            };
+            try {
+                await fetch(API_DEV, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(devData) });
+                bootstrap.Modal.getInstance(document.getElementById('addDeviceModal')).hide();
+                e.target.reset();
+                loadData();
+            } catch(err) { console.error(err); }
+        }
+
+        async function submitUser(e) {
+            e.preventDefault();
+            const usrData = {
+                name: document.getElementById('usrName').value,
+                email: document.getElementById('usrEmail').value,
+                plan: document.getElementById('usrPlan').value
+            };
+            try {
+                await fetch(API_USR, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(usrData) });
+                bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
+                e.target.reset();
+                loadData();
+            } catch(err) { console.error(err); }
+        }
+
+        async function submitPlan(e) {
+            e.preventDefault();
+            const plnData = {
+                name: document.getElementById('plnName').value,
+                price: parseFloat(document.getElementById('plnPrice').value),
+                features: document.getElementById('plnFeatures').value.split(',').map(f => f.trim())
+            };
+            try {
+                await fetch(API_PLN, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(plnData) });
+                bootstrap.Modal.getInstance(document.getElementById('addPlanModal')).hide();
+                e.target.reset();
+                loadData();
+            } catch(err) { console.error(err); }
+        }
+
+        // --- OTP Simulation & Submit New Connection Lead Form ---
+        let currentOTP = "";
+
+        function requestOTP(isResend = false) {
+            const name = document.getElementById('ln_name').value;
+            const city = document.getElementById('ln_city').value;
+            const contact = document.getElementById('ln_contact').value;
+            
+            if(!name || !city || !contact) {
+                alert("Please fill in your Name, City, and Contact Number first!");
+                return;
+            }
+            if(contact.length < 10) {
+                alert("Please enter a valid 10-digit mobile number.");
+                return;
+            }
+
+            // Simulate OTP generation (Mock Gateway)
+            currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            // Update UI to show OTP field
+            document.getElementById('otpRow').classList.remove('d-none');
+            document.getElementById('btnGetOtp').classList.add('d-none');
+            document.getElementById('btnSubmitLead').classList.remove('d-none');
+            
+            if (isResend) {
+                document.getElementById('otpStatusMsg').innerHTML = `<i class="bi bi-arrow-repeat"></i> New OTP sent!`;
+                document.getElementById('ln_otp').value = ""; // clear old OTP input
+            } else {
+                document.getElementById('otpStatusMsg').innerHTML = `<i class="bi bi-check-circle-fill"></i> OTP sent to mobile!`;
+            }
+            
+            // For testing purposes locally, show the OTP in an alert
+            alert(`[NEXWAY SMS SYSTEM]\nOTP sent to ${contact}\nYour ${isResend ? 'NEW ' : ''}OTP is: ${currentOTP}`);
+        }
+
+        async function verifyAndSubmitLead(e) {
+            e.preventDefault();
+            const userOtp = document.getElementById('ln_otp').value;
+            
+            if (userOtp !== currentOTP) {
+                alert("Invalid OTP! Please enter the exact OTP sent to your device.");
+                return;
+            }
+
+            const name = document.getElementById('ln_name').value;
+            const city = document.getElementById('ln_city').value;
+            const address = document.getElementById('ln_addr').value;
+            const pincode = document.getElementById('ln_pin').value;
+            const contact_no = document.getElementById('ln_contact').value;
+            
+            try {
+                await fetch(API_LEAD, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ name, city, address, pincode, contact_no })
+                });
+                
+                // Reset form and UI
+                document.getElementById('leadForm').reset();
+                document.getElementById('otpRow').classList.add('d-none');
+                document.getElementById('btnGetOtp').classList.remove('d-none');
+                document.getElementById('btnSubmitLead').classList.add('d-none');
+                
+                document.getElementById('leadSuccessMsg').classList.remove('d-none');
+                setTimeout(() => document.getElementById('leadSuccessMsg').classList.add('d-none'), 5000);
+                
+                loadData();
+            } catch(err) { console.error(err); }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
