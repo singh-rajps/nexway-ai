@@ -807,12 +807,17 @@
     <script>
         function switchTab(tabId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            if(tabId.startsWith('admin-')) {
-                document.getElementById('admin-layout').classList.add('active');
-                switchAdminTab(tabId);
+            
+            if(tabId === 'admin' || tabId.startsWith('admin-') || tabId.startsWith('admin')) {
+                const adminLayout = document.getElementById('admin-layout');
+                if(adminLayout) adminLayout.classList.add('active');
+                
+                let targetAdminTab = tabId.startsWith('admin-') ? tabId : 'admin-overview';
+                switchAdminTab(targetAdminTab);
                 loadData();
             } else {
-                document.getElementById(`${tabId}-section`).classList.add('active');
+                const targetSection = document.getElementById(`${tabId}-section`);
+                if(targetSection) targetSection.classList.add('active');
             }
             window.scrollTo(0, 0);
         }
@@ -821,12 +826,18 @@
             document.querySelectorAll('.admin-nav').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.admin-view').forEach(el => el.classList.remove('active'));
             
-            let navId = `nav-${tabId.split('-')[1]}`;
-            let navEl = document.getElementById(navId);
+            let fullTabId = tabId.startsWith('admin-') ? tabId : `admin-${tabId}`;
+            let subName = fullTabId.replace('admin-', '');
+            
+            let navEl = document.getElementById(`nav-${subName}`);
             if(navEl) navEl.classList.add('active');
             
-            let viewEl = document.getElementById(tabId);
+            let viewEl = document.getElementById(fullTabId);
             if(viewEl) viewEl.classList.add('active');
+            
+            if(subName === 'overview') {
+                setTimeout(renderChart, 100);
+            }
         }
 
         // --- Data Fetching ---
@@ -977,9 +988,10 @@
 
         // --- Analytics Chart Logic ---
         function renderChart() {
-            const filter = document.getElementById('chartTimeFilter').value;
+            const filterEl = document.getElementById('chartTimeFilter');
             const ctx = document.getElementById('analyticsChart');
-            if(!ctx) return;
+            if(!ctx || !filterEl) return;
+            const filter = filterEl.value || 'monthly';
             
             let labels = [];
             let userCounts = [];
