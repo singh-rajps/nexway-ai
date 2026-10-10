@@ -88,6 +88,8 @@
     <!-- HOME SECTION -->
     <div id="home-section" class="view-section active">
         <div class="container-fluid px-lg-5 py-4">
+            
+            <!-- Hero Support Banner -->
             <div class="row mb-5 g-0" style="min-height: 420px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.15); background-color: #103487;">
                 <!-- Text Content Side -->
                 <div class="col-md-6 col-lg-5 text-white p-4 p-lg-5 d-flex flex-column justify-content-center position-relative" style="z-index: 2;">
@@ -95,17 +97,304 @@
                     <div class="border border-white border-2 p-3 p-md-4 text-center position-relative mt-4" style="border-radius: 12px; background-color: rgba(16, 52, 135, 0.4); backdrop-filter: blur(4px);">
                         <span class="px-4 py-1 position-absolute top-0 start-50 translate-middle rounded-pill fw-bold" style="background-color: #c4f033; color: #103487; font-size: clamp(0.85rem, 2vw, 1rem); white-space: nowrap; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Save as: Nexway Support</span>
                         <h4 class="fw-bold mt-4 mb-3" style="font-size: clamp(1.1rem, 2vw, 1.4rem); letter-spacing: 0.5px;"><i class="bi bi-telephone-fill me-2" style="color: #c4f033;"></i>080-65159555<br class="d-md-none"><span class="d-none d-md-inline"> / </span>080-44479555</h4>
-                        <button class="btn text-white mt-2 px-5 py-2 fw-bold rounded shadow text-uppercase" style="background-color: #d1121c; letter-spacing: 1px;">SAVE NOW</button>
+                        <button class="btn text-white mt-2 px-5 py-2 fw-bold rounded shadow text-uppercase" onclick="switchTab('contact')" style="background-color: #d1121c; letter-spacing: 1px;">SAVE NOW</button>
                     </div>
                 </div>
                 <!-- Image Side -->
                 <div class="col-md-6 col-lg-7 d-none d-md-block position-relative">
-                    <!-- High-quality image of customer support / fast internet usage -->
                     <div style="background: url('https://images.unsplash.com/photo-1590650153855-d9e808231d41?auto=format&fit=crop&w=1200&q=80') center 30%/cover no-repeat; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
-                    <!-- Smooth fade gradient to blend with the blue background -->
                     <div style="position: absolute; top: 0; left: 0; bottom: 0; width: 120px; background: linear-gradient(to right, #103487, transparent);"></div>
                 </div>
             </div>
+
+            <!-- 3 Easy Steps Banner -->
+            <div class="row mb-5 g-4 text-center">
+                <div class="col-12 text-center mb-2">
+                    <span class="badge bg-primary-subtle text-primary fw-bold px-3 py-2 rounded-pill text-uppercase" style="letter-spacing: 1px;">Quick Setup</span>
+                    <h2 class="fw-bold mt-2" style="color: #103487;">Get Connected in 3 Simple Steps</h2>
+                    <p class="text-muted">Experience lightning-fast optical fiber internet with zero setup hassle.</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4 text-center" style="background: #ffffff; transition: transform 0.2s ease;">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 70px; height: 70px; background-color: #e8f0fe; color: #103487;">
+                            <i class="bi bi-card-checklist fs-2"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">1. Choose Your Plan</h5>
+                        <p class="text-muted small mb-0">Select high-speed unlimited fiber plans starting from 100 Mbps up to 1 Gbps tailored for your needs.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4 text-center" style="background: #ffffff; transition: transform 0.2s ease;">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 70px; height: 70px; background-color: #e6f9ed; color: #198754;">
+                            <i class="bi bi-geo-alt-fill fs-2"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">2. Verify Address & OTP</h5>
+                        <p class="text-muted small mb-0">Fill in your address details with instant mobile OTP verification for fast service confirmation.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4 text-center" style="background: #ffffff; transition: transform 0.2s ease;">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 70px; height: 70px; background-color: #fff4e5; color: #fd7e14;">
+                            <i class="bi bi-router fs-2"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">3. Same-Day Installation</h5>
+                        <p class="text-muted small mb-0">Our certified technician delivers and configures your Smart Dual-Band Wi-Fi 6 router for free.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured High-Speed Fiber Plans -->
+            <div class="row mb-5">
+                <div class="col-12 d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3">
+                    <div>
+                        <span class="badge bg-danger-subtle text-danger fw-bold px-3 py-2 rounded-pill text-uppercase" style="letter-spacing: 1px;">Best Value Plans</span>
+                        <h2 class="fw-bold mt-2 mb-0" style="color: #103487;">Popular Nexway Fiber Plans</h2>
+                        <p class="text-muted mb-0">True symmetric upload & download speeds with zero throttling.</p>
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-primary fw-bold rounded-pill px-4 py-2" onclick="switchTab('new-connection')">
+                            <i class="bi bi-plus-circle me-1"></i> Request Connection
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 p-4 position-relative bg-white">
+                        <span class="badge bg-secondary position-absolute top-0 end-0 m-4 rounded-pill px-3 py-2">Starter</span>
+                        <h5 class="fw-bold text-dark mb-1">Nexway Starter</h5>
+                        <p class="text-muted small">Ideal for surfing, browsing & work</p>
+                        <div class="my-3">
+                            <h2 class="fw-bold d-inline" style="color: #103487;">100</h2>
+                            <span class="fs-5 text-muted fw-bold">Mbps</span>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-3">₹499<span class="fs-6 text-muted fw-normal">/month</span></h4>
+                        <ul class="list-unstyled mb-4 small text-secondary">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Unlimited High-Speed Data</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Equal Upload & Download</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Free Dual-Band Wi-Fi Router</li>
+                            <li class="mb-2 text-muted"><i class="bi bi-dash-circle me-2"></i>OTT Subscriptions not included</li>
+                        </ul>
+                        <button class="btn btn-outline-primary w-100 fw-bold py-2 rounded-3 mt-auto" onclick="switchTab('new-connection')">Select Plan</button>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-primary border-2 shadow rounded-4 p-4 position-relative bg-white" style="transform: scale(1.02);">
+                        <span class="badge text-white position-absolute top-0 end-0 m-4 rounded-pill px-3 py-2" style="background-color: #d1121c;"><i class="bi bi-fire me-1"></i>Most Popular</span>
+                        <h5 class="fw-bold text-dark mb-1">Turbo Entertainment</h5>
+                        <p class="text-muted small">Binge 4K movies & seamless gaming</p>
+                        <div class="my-3">
+                            <h2 class="fw-bold d-inline" style="color: #103487;">300</h2>
+                            <span class="fs-5 text-muted fw-bold">Mbps</span>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-3">₹799<span class="fs-6 text-muted fw-normal">/month</span></h4>
+                        <ul class="list-unstyled mb-4 small text-secondary">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Unlimited Ultra-fast Fiber Data</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Ultra-Low Gaming Latency</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Free 8+ Premium OTTs</strong> (Disney+ Hotstar, SonyLIV, ZEE5)</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Smart AI Wi-Fi 6 Router Included</li>
+                        </ul>
+                        <button class="btn text-white w-100 fw-bold py-2 rounded-3 mt-auto shadow-sm" style="background-color: #103487;" onclick="switchTab('new-connection')">Get Connected Now</button>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 p-4 position-relative bg-white">
+                        <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-4 rounded-pill px-3 py-2">Giga Speed</span>
+                        <h5 class="fw-bold text-dark mb-1">Giga Extreme Max</h5>
+                        <p class="text-muted small">Power creators, studios & smart villas</p>
+                        <div class="my-3">
+                            <h2 class="fw-bold d-inline" style="color: #103487;">1000</h2>
+                            <span class="fs-5 text-muted fw-bold">Mbps (1 Gbps)</span>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-3">₹1,499<span class="fs-6 text-muted fw-normal">/month</span></h4>
+                        <ul class="list-unstyled mb-4 small text-secondary">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>True 1 Gbps Gigabit Speed</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>15+ Premium OTTs + 350+ Live Channels</strong></li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Static IP & Dedicated Support Queue</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Mesh Wi-Fi Multi-room coverage</li>
+                        </ul>
+                        <button class="btn btn-outline-primary w-100 fw-bold py-2 rounded-3 mt-auto" onclick="switchTab('new-connection')">Select Plan</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Choose Nexway Features Section -->
+            <div class="row mb-5 py-4 g-4 align-items-center">
+                <div class="col-12 text-center mb-3">
+                    <span class="badge bg-success-subtle text-success fw-bold px-3 py-2 rounded-pill text-uppercase" style="letter-spacing: 1px;">Why Nexway</span>
+                    <h2 class="fw-bold mt-2" style="color: #103487;">Engineered for Unmatched Performance</h2>
+                    <p class="text-muted">Discover the difference of our 100% pure fiber-optic core infrastructure.</p>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="d-flex gap-3 p-3 bg-white rounded-4 shadow-sm h-100">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 55px; height: 55px; background: #e8f0fe; color: #103487;">
+                            <i class="bi bi-lightning-charge-fill fs-3"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-1">Ultra-Low Latency Ping</h6>
+                            <p class="text-muted small mb-0">Direct peering with AWS, Google, Cloudflare & Steam for uninterrupted competitive gaming.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="d-flex gap-3 p-3 bg-white rounded-4 shadow-sm h-100">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 55px; height: 55px; background: #e6f9ed; color: #198754;">
+                            <i class="bi bi-shield-lock-fill fs-3"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-1">AI IoT Threat Protection</h6>
+                            <p class="text-muted small mb-0">Automated malware filtering and smart IoT firewall protecting every connected device.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="d-flex gap-3 p-3 bg-white rounded-4 shadow-sm h-100">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 55px; height: 55px; background: #fff4e5; color: #fd7e14;">
+                            <i class="bi bi-arrow-repeat fs-3"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-1">99.99% Uptime Guarantee</h6>
+                            <p class="text-muted small mb-0">Self-healing ring topology fiber lines ensure continuous connectivity 24 hours a day.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="d-flex gap-3 p-3 bg-white rounded-4 shadow-sm h-100">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 55px; height: 55px; background: #f3e8ff; color: #7e22ce;">
+                            <i class="bi bi-tv-fill fs-3"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-1">All-In-One OTT Entertainment</h6>
+                            <p class="text-muted small mb-0">Access all your favorite streaming platforms through a single bundled subscription.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="d-flex gap-3 p-3 bg-white rounded-4 shadow-sm h-100">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 55px; height: 55px; background: #e0f2fe; color: #0284c7;">
+                            <i class="bi bi-wifi fs-3"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-1">Whole-Home Wi-Fi 6 Mesh</h6>
+                            <p class="text-muted small mb-0">Eliminate dead zones with seamless roaming across every corner of your home or office.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="d-flex gap-3 p-3 bg-white rounded-4 shadow-sm h-100">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 55px; height: 55px; background: #fee2e2; color: #dc2626;">
+                            <i class="bi bi-headset fs-3"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-1">24/7 Local Support Desk</h6>
+                            <p class="text-muted small mb-0">Instant phone and WhatsApp assistance with dedicated engineers in your neighborhood.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Smart IoT & Device Management Interactive Showcase -->
+            <div class="row mb-5 g-0 rounded-4 overflow-hidden shadow-sm" style="background: linear-gradient(135deg, #0b2559 0%, #103487 100%);">
+                <div class="col-lg-6 p-4 p-md-5 text-white d-flex flex-column justify-content-center">
+                    <span class="badge bg-warning text-dark fw-bold px-3 py-2 rounded-pill text-uppercase mb-3 align-self-start" style="letter-spacing: 1px;">Smart Network</span>
+                    <h2 class="fw-bold mb-3" style="color: #c4f033;">Real-time IoT & Device Management</h2>
+                    <p class="text-light opacity-75 mb-4">Take full control of your broadband connection. Monitor connected phones, laptops, and smart IoT devices, view bandwidth consumption, run speed tests, and manage subscriptions with one click.</p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <button class="btn btn-light fw-bold px-4 py-2 rounded-3 text-primary shadow-sm" onclick="switchTab('admin')">
+                            <i class="bi bi-speedometer2 me-2"></i>Open Admin Dashboard
+                        </button>
+                        <button class="btn btn-outline-light fw-bold px-4 py-2 rounded-3" data-bs-toggle="modal" data-bs-target="#quickRechargeModal">
+                            <i class="bi bi-lightning-charge-fill me-1"></i>Quick Recharge
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block position-relative" style="min-height: 320px;">
+                    <div style="background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=80') center/cover; position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.85;"></div>
+                    <div style="position: absolute; top: 0; left: 0; bottom: 0; width: 120px; background: linear-gradient(to right, #0b2559, transparent);"></div>
+                </div>
+            </div>
+
+            <!-- Verified Customer Reviews Section -->
+            <div class="row mb-5 g-4">
+                <div class="col-12 text-center mb-2">
+                    <span class="badge bg-warning-subtle text-dark fw-bold px-3 py-2 rounded-pill text-uppercase" style="letter-spacing: 1px;">Testimonials</span>
+                    <h2 class="fw-bold mt-2" style="color: #103487;">Loved by Over 50,000+ Happy Customers</h2>
+                    <p class="text-muted">See how Nexway Fiber is powering homes and enterprises across India.</p>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white">
+                        <div class="text-warning mb-2">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="text-secondary small fst-italic mb-4">"Switched to Nexway 300 Mbps plan 6 months ago. Constant zero-buffering 4K streaming and my ping on Valorant dropped to 8ms. Best decision ever!"</p>
+                        <div class="d-flex align-items-center gap-3 mt-auto">
+                            <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">RK</div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark">Rahul Kumar</h6>
+                                <span class="text-muted small">Software Architect, BTM Layout</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white">
+                        <div class="text-warning mb-2">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="text-secondary small fst-italic mb-4">"Same day installation was done within 3 hours of submitting the new connection form online. Technician was very polite and router setup was seamless."</p>
+                        <div class="d-flex align-items-center gap-3 mt-auto">
+                            <div class="rounded-circle bg-success text-white fw-bold d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">PS</div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark">Priya Sharma</h6>
+                                <span class="text-muted small">Design Lead, Indiranagar</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white">
+                        <div class="text-warning mb-2">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="text-secondary small fst-italic mb-4">"We run our whole 25-person studio on the Nexway 1 Gbps Gigabit plan. Unbelievable reliability and the Quick Recharge portal is super convenient."</p>
+                        <div class="d-flex align-items-center gap-3 mt-auto">
+                            <div class="rounded-circle bg-danger text-white fw-bold d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">AM</div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark">Amit Mukherjee</h6>
+                                <span class="text-muted small">Agency Founder, Koramangala</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Download Selfcare Mobile App Banner -->
+            <div class="row mb-4 p-4 p-md-5 rounded-4 shadow-sm bg-light border align-items-center">
+                <div class="col-md-8">
+                    <span class="badge bg-primary text-white fw-bold px-3 py-2 rounded-pill text-uppercase mb-2">Selfcare App</span>
+                    <h3 class="fw-bold text-dark mb-2">Manage Everything On-The-Go with Nexway App</h3>
+                    <p class="text-muted mb-0">Track daily usage, pay bills with 1-click UPI, run Wi-Fi health diagnostics, and raise instant support tickets from your phone.</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-4 mt-md-0">
+                    <button class="btn btn-dark fw-bold px-4 py-2 rounded-3 me-2 mb-2 shadow-sm">
+                        <i class="bi bi-apple me-2"></i>App Store
+                    </button>
+                    <button class="btn btn-dark fw-bold px-4 py-2 rounded-3 mb-2 shadow-sm">
+                        <i class="bi bi-google-play me-2"></i>Google Play
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
     
